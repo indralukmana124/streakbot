@@ -4,10 +4,6 @@ name: Build StreakBot APK
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
-      - master
-      - "**"
 
 permissions:
   contents: read
@@ -28,6 +24,9 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Accept Android SDK Licenses
+        run: yes | sdkmanager --licenses || true
 
       - name: Install Android SDK
         run: sdkmanager "platforms;android-34" "build-tools;34.0.0"
@@ -57,4 +56,3 @@ jobs:
           name: StreakBot-APK
           path: ${{ env.PROJECT_DIR }}/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
-          
