@@ -24,12 +24,15 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-
-      - name: Accept Android SDK Licenses
-        run: yes | sdkmanager --licenses || true
+        with:
+          cmdline-tools-version: "12266719"
+          accept-android-sdk-licenses: true
+          log-accepted-android-sdk-licenses: false
 
       - name: Install Android SDK
-        run: sdkmanager "platforms;android-34" "build-tools;34.0.0"
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager "platforms;android-34" "build-tools;34.0.0"
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -39,9 +42,9 @@ jobs:
       - name: Detect project folder
         run: |
           if [ -f settings.gradle.kts ]; then
-            echo "PROJECT_DIR=." >> $GITHUB_ENV
+            echo "PROJECT_DIR=." >> "$GITHUB_ENV"
           elif [ -f StreakBot/settings.gradle.kts ]; then
-            echo "PROJECT_DIR=StreakBot" >> $GITHUB_ENV
+            echo "PROJECT_DIR=StreakBot" >> "$GITHUB_ENV"
           else
             echo "Project Android tidak ditemukan!"
             exit 1
